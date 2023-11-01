@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const port = 3001;
 
-app.use(express.json())
+app.use(express.json());
 
 let persons = [
   {
@@ -30,9 +30,15 @@ let persons = [
 app.post('/api/persons', (req, res) => {
   const newId = Math.floor(Math.random() * 1000000);
   const body = req.body;
+  const names = persons.map(person => person.name);
+  console.log(names);
   if (!body.name || !body.number) {
     return res.status(400).json({
       error: 'Request incomplete',
+    });
+  } else if (names.includes(body.name)) {
+    return res.status(400).json({
+      error: 'Contact already exist',
     });
   }
 
