@@ -2,7 +2,9 @@ const express = require('express');
 const app = express();
 const port = 3001;
 
-const persons = [
+app.use(express.json())
+
+let persons = [
   {
     id: 1,
     name: 'Arto Hellas',
@@ -24,6 +26,27 @@ const persons = [
     number: '39-23-6423122',
   },
 ];
+
+app.post('/api/persons', (req, res) => {
+  const newId = Math.floor(Math.random() * 1000000);
+  const body = req.body;
+  if (!body.name || !body.number) {
+    return res.status(400).json({
+      error: 'Request incomplete',
+    });
+  }
+
+  const person = {
+    id: newId,
+    name: body.name,
+    number: body.number,
+  };
+  persons = persons.concat(person);
+  res.json(person);
+
+  // notes=notes.concat(...)
+});
+
 app.get('/', (req, res) => res.send('<h1>Hello World!<h1>'));
 app.get('/api/persons', (req, res) => res.json(persons));
 app.get('/info', (req, res) => {
@@ -35,7 +58,22 @@ app.get('/info', (req, res) => {
 });
 app.get('/api/persons/:id', (req, res) => {
   const id = Number(req.params.id);
-  res.json(persons[id-1]);
+  const person = persons.find(person => person.id === id);
+  console.log(person);
+  res.json(person);
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+// app.delete('api/persons/:id', (req, res) => {
+//   const id = Number(req.params.id);
+//   // notes = notes.filter(note => note.id !== id);
+//   // res.json(notes);
+//   // res.status(204).end;
+// });
+
+app.delete('/api/persons/:id', (req, res) => {
+  const id = Number(req.params.id);
+  persons = persons.filter(person => person.id !== id);
+  res.json(persons);
+  res.status(204).end;
+});
+app.listen(port);
