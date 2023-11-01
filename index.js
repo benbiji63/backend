@@ -33,5 +33,9 @@ app.get('/info', (req, res) => {
   <p>${date.toString()}</p>
   `);
 });
+app.get('/api/persons/:id', (req, res) => {
+  const id = Number(req.params.id);
+  res.json(persons[id-1]);
+});
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
