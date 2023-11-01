@@ -26,5 +26,12 @@ const persons = [
 ];
 app.get('/', (req, res) => res.send('<h1>Hello World!<h1>'));
 app.get('/api/persons', (req, res) => res.json(persons));
+app.get('/info', (req, res) => {
+  const date = new Date();
+  res.send(`
+  <p>Phonebook has info of ${persons.length} 
+  <p>${date.toString()}</p>
+  `);
+});
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
