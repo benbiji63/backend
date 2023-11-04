@@ -1,8 +1,13 @@
 const express = require('express');
+const morgan = require("morgan");
+const morganBody = require('morgan-body');
+
 const app = express();
 const port = 3001;
 
 app.use(express.json());
+app.use(morgan('combined'));
+morganBody(app);
 
 let persons = [
   {
